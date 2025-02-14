@@ -6,8 +6,8 @@
   "tailwind": {
     "config": "tailwind.config.js",
     "css": "src/assets/index.css",
-    "baseColor": "zinc",
-    "cssVariables": true,
+    "baseColor": "slate",
+    "cssVariables": false,
     "prefix": ""
   },
   "framework": "vite",
