@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import StudentTable from "@/components/table/student-table/StudentTable.vue";
-import ColorMode from "@/components/ColorMode.vue";
-
 import { onMounted, ref } from 'vue'
 import { columns } from '@/components/table/student-table/columns.ts'
+import DataTable from '@/components/table/Datatable.vue'
 import type { Student } from '@/components/table/student-table/student.ts'
 
 const data = ref<Student[]>([])
@@ -22,6 +20,7 @@ async function getData(): Promise<Student[]> {
       average: 8.00,
       final_flag: true,
     },
+    // Puedes agregar más datos de ejemplo aquí.
   ]
 }
 
@@ -30,18 +29,8 @@ onMounted(async () => {
 })
 </script>
 
-
 <template>
-  <div class="min-h-screen m-5">
-    <p class="text-center text-5xl mb-4">Estudiantes</p>
-    <ColorMode />
-    <div class="container py-10 mx-auto">
-      <StudentTable :columns="columns" :data="data" />
-    </div>
+  <div class="container py-10 mx-auto">
+    <DataTable :columns="columns" :data="data" />
   </div>
 </template>
-
-<style scoped>
-
-</style>
-
