@@ -1,42 +1,17 @@
 <script setup lang="ts">
-import StudentTable from "@/components/table/student-table/StudentTable.vue";
+import StudentTable from "@/components/table/grades-table/GradesTable.vue";
 import ColorMode from "@/components/ColorMode.vue";
-
-import { onMounted, ref } from 'vue'
-import { columns } from '@/components/table/student-table/columns.ts'
-import type { Student } from '@/components/table/student-table/student.ts'
-
-const data = ref<Student[]>([])
-
-async function getData(): Promise<Student[]> {
-  return [
-    {
-      id: '728ed52f',
-      name: 'Juan',
-      ap: 'Pérez',
-      am: 'Gómez',
-      asignature_name: 'Matemáticas',
-      first_partial: 8,
-      second_partial: 7,
-      third_partial: 9,
-      average: 8.00,
-      final_flag: true,
-    },
-  ]
-}
-
-onMounted(async () => {
-  data.value = await getData()
-})
+import Logo from "@/components/logo.vue";
+import StudentsTable from "@/components/table/students-table/StudentsTable.vue";
 </script>
 
 
 <template>
-  <div class="min-h-screen m-5">
-    <p class="text-center text-5xl mb-4">Estudiantes</p>
+  <div class="min-h-screen m-5 flex flex-col items-center">
+    <Logo />
     <ColorMode />
     <div class="container py-10 mx-auto">
-      <StudentTable :columns="columns" :data="data" />
+      <StudentsTable/>
     </div>
   </div>
 </template>
@@ -44,4 +19,3 @@ onMounted(async () => {
 <style scoped>
 
 </style>
-

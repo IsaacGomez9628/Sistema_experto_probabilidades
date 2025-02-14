@@ -1,4 +1,4 @@
-export interface Student {
+export interface Grades {
     id: string
     name: string
     ap: string

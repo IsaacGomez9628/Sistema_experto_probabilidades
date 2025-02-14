@@ -1,8 +1,8 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import type {Student} from "@/components/table/student-table/student.ts";
+import type { Grades } from "@/components/table/grades-table/grades.ts";
 
-export const columns: ColumnDef<Student>[] = [
+export const columns: ColumnDef<Grades>[] = [
     {
         accessorKey: 'name',
         header: () => h('div', { class: 'text-left' }, 'Nombre'),

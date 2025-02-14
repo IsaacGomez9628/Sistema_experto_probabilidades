@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { columns } from '@/components/table/student-table/columns.ts'
+import { columns } from '@/components/table/grades-table/columns.ts'
 import DataTable from '@/components/table/Datatable.vue'
-import type { Student } from '@/components/table/student-table/student.ts'
+import type { Grades } from '@/components/table/grades-table/grades.ts'
 
-const data = ref<Student[]>([])
+const data = ref<Grades[]>([])
 
-async function getData(): Promise<Student[]> {
+async function getData(): Promise<Grades[]> {
   return [
     {
       id: '728ed52f',
