@@ -5,8 +5,8 @@ import logo from '@/assets/images/omg.png'
 <template>
   <div class="flex flex-row items-center">
     <div>
-      <p class="text-center text-5xl mb-4 font-bold">Funaestudiantes.com</p>
-      <p class="text-center text-2xl mb-4">¿Lograrás pasar de cuatrimestre?</p>
+      <p class="text-5xl mb-4 font-bold">Funaestudiantes.com</p>
+      <p class="text-2xl mb-4">¿Lograrás pasar de cuatrimestre?</p>
     </div>
     <div>
       <img :src="logo" alt="Logo" class="w-32">

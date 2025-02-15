@@ -2,6 +2,7 @@ import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import type { Students } from "@/components/table/students-table/students"
 import { Button } from "@/components/ui/button"
+import { useRouter } from 'vue-router'
 
 export const columns: ColumnDef<Students>[] = [
     {
@@ -32,11 +33,14 @@ export const columns: ColumnDef<Students>[] = [
     {
         accessorKey: 'actions',
         header: 'Acciones',
-        cell: ({ row }) =>
-            h(Button, {
+        cell: ({ row }) => {
+            const router = useRouter()
+            const studentId = row.getValue('id')
+            return h(Button, {
                 variant: 'default',
                 class: 'px-4 py-2 text-sm font-medium',
-                onClick: () => alert(`Ver carga académica de ${row.getValue('name')}`),
-            }, () => 'Ver carga académica'),
-    },
+                onClick: () => router.push({ name: 'studentLoad', params: { id: studentId } }),
+            }, () => 'Ver carga académica')
+        },
+    }
 ]
