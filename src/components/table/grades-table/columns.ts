@@ -4,21 +4,6 @@ import type { Grades } from "@/components/table/grades-table/grades.ts";
 
 export const columns: ColumnDef<Grades>[] = [
     {
-        accessorKey: 'name',
-        header: () => h('div', { class: 'text-left' }, 'Nombre'),
-        cell: ({ row }) => h('div', {}, row.getValue('name')),
-    },
-    {
-        accessorKey: 'ap',
-        header: 'Apellido Paterno',
-        cell: ({ row }) => h('div', {}, row.getValue('ap')),
-    },
-    {
-        accessorKey: 'am',
-        header: 'Apellido Materno',
-        cell: ({ row }) => h('div', {}, row.getValue('am')),
-    },
-    {
         accessorKey: 'asignature_name',
         header: 'Asignatura',
         cell: ({ row }) => h('div', {}, row.getValue('asignature_name')),
@@ -30,13 +15,26 @@ export const columns: ColumnDef<Grades>[] = [
     },
     {
         accessorKey: 'second_partial',
-        header: 'Primer Parcial',
+        header: 'Segundo Parcial',
         cell: ({ row }) => h('div', {}, row.getValue('second_partial')),
     },
     {
         accessorKey: 'third_partial',
-        header: 'Primer Parcial',
+        header: 'Tercer Parcial',
         cell: ({ row }) => h('div', {}, row.getValue('third_partial')),
+    },
+    {
+        accessorKey: 'final_flag',
+        header: 'Examen final',
+        cell: ({ row }) => row.getValue('final_flag') ? 'Autorizado' : 'No autorizado',
+    },
+    {
+        accessorKey: 'probability',
+        header: 'Probabilidad de exito',
+        cell: ({ row }) => {
+            const probability = row.getValue('probability') as number;
+            return h('div', {}, `${(probability * 100).toFixed(2)}%`);
+        },
     },
     {
         accessorKey: 'average',
@@ -46,10 +44,5 @@ export const columns: ColumnDef<Grades>[] = [
             const formatted = average.toFixed(2)
             return h('div', { class: 'text-right font-medium' }, formatted)
         },
-    },
-    {
-        accessorKey: 'final_flag',
-        header: 'Finalizado',
-        cell: ({ row }) => row.getValue('final_flag') ? 'Sí' : 'No',
     },
 ]
