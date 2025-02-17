@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
-import { useForm } from 'vee-validate'
-import { toTypedSchema } from '@vee-validate/zod'
+import {defineProps, defineEmits} from 'vue'
+import {useForm} from 'vee-validate'
+import {toTypedSchema} from '@vee-validate/zod'
 import * as z from 'zod'
 import axios from "axios"
+import {inject} from 'vue' // <-- Añadir
 
-import { Button } from '@/components/ui/button'
+import {Button} from '@/components/ui/button'
 import {
   FormControl,
   FormField,
@@ -13,7 +14,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import {Input} from '@/components/ui/input'
+
 
 // Definición de las props
 const props = defineProps<{
@@ -29,12 +31,14 @@ const props = defineProps<{
 const emit = defineEmits(['closeDialog', 'refreshData'])
 
 // Esquema de validación
+// Esquema de validación
 const formSchema = toTypedSchema(z.object({
   id: z.number().optional(),
-  first_partial: z.number().min(0).max(100),
-  second_partial: z.number().min(0).max(100),
-  third_partial: z.number().min(0).max(100),
+  first_partial: z.number().min(0).max(100).nullable().optional(),
+  second_partial: z.number().min(0).max(100).nullable().optional(),
+  third_partial: z.number().min(0).max(100).nullable().optional(),
 }))
+
 
 // Inicialización del formulario
 const form = useForm({
@@ -47,19 +51,19 @@ const form = useForm({
   }
 })
 
+const reloadData = inject('reloadData') as () => Promise<void>
+
 // Función que se ejecuta al enviar el formulario
 // EditGradeForm.vue
 const onSubmit = form.handleSubmit(async (values) => {
   try {
-    const response = await axios.put(
+    await axios.put(
         `http://localhost:5000/api/students_asignatures`,
         values
     );
     console.log('Calificaciones actualizadas:', values);
-    // Emite el objeto actualizado para que el componente padre lo reciba
-    emit('refreshData', values);
-    // Cierra el diálogo
     emit('closeDialog');
+    await reloadData(); // <-- Usar la función inyectada
   } catch (error) {
     console.error('Error al actualizar las notas:', error.response?.data || error.message);
   }
@@ -70,15 +74,15 @@ const onSubmit = form.handleSubmit(async (values) => {
 <template>
   <form @submit="onSubmit">
     <!-- Campo oculto para el ID -->
-    <input type="hidden" v-model="form.values.id" />
+    <input type="hidden" v-model="form.values.id"/>
 
     <FormField v-slot="{ componentField }" name="first_partial">
       <FormItem>
         <FormLabel>Primer Parcial</FormLabel>
         <FormControl>
-          <Input type="number" placeholder="0" v-bind="componentField" />
+          <Input type="number" placeholder="0" v-bind="componentField"/>
         </FormControl>
-        <FormMessage />
+        <FormMessage/>
       </FormItem>
     </FormField>
 
@@ -86,9 +90,9 @@ const onSubmit = form.handleSubmit(async (values) => {
       <FormItem>
         <FormLabel>Segundo Parcial</FormLabel>
         <FormControl>
-          <Input type="number" placeholder="0" v-bind="componentField" />
+          <Input type="number" placeholder="0" v-bind="componentField"/>
         </FormControl>
-        <FormMessage />
+        <FormMessage/>
       </FormItem>
     </FormField>
 
@@ -96,12 +100,11 @@ const onSubmit = form.handleSubmit(async (values) => {
       <FormItem>
         <FormLabel>Tercer Parcial</FormLabel>
         <FormControl>
-          <Input type="number" placeholder="0" v-bind="componentField" />
+          <Input type="number" placeholder="0" v-bind="componentField"/>
         </FormControl>
-        <FormMessage />
+        <FormMessage/>
       </FormItem>
     </FormField>
-
     <Button class="mt-5" type="submit">
       Guardar
     </Button>

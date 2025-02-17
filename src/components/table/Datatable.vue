@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="TData, TValue">
 import type { ColumnDef } from '@tanstack/vue-table'
+import type { Ref } from 'vue'
 import {
   Table,
   TableBody,
@@ -16,12 +17,17 @@ import {
 } from '@tanstack/vue-table'
 
 const props = defineProps<{
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[],
+  data: TData[] | Ref<TData[]>
 }>()
 
+// Verifica si es un Ref o un array normal
+function getData() {
+  return Array.isArray(props.data) ? props.data : props.data.value
+}
+
 const table = useVueTable({
-  get data() { return props.data },
+  get data() { return getData() },
   get columns() { return props.columns },
   getCoreRowModel: getCoreRowModel(),
 })
@@ -34,7 +40,8 @@ const table = useVueTable({
         <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
           <TableHead v-for="header in headerGroup.headers" :key="header.id">
             <FlexRender
-                v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
+                v-if="!header.isPlaceholder"
+                :render="header.column.columnDef.header"
                 :props="header.getContext()"
             />
           </TableHead>
@@ -53,7 +60,7 @@ const table = useVueTable({
         </template>
         <template v-else>
           <TableRow>
-            <TableCell :colspan="columns.length" class="h-24 text-center">
+            <TableCell :colspan="props.columns.length" class="h-24 text-center">
               No results.
             </TableCell>
           </TableRow>

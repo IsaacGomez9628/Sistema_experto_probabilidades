@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import EditGrade from "@/components/forms/EditGradeForm.vue"
+import EditGradeForm from "@/components/forms/EditGradeForm.vue"
 
 // Recibimos las calificaciones iniciales
 const props = defineProps<{
@@ -21,14 +21,14 @@ const props = defineProps<{
   }
 }>()
 
-// Emitiremos el objeto actualizado al padre
-const emit = defineEmits(['updateGrade'])
-
 const dialogOpen = ref(false)
 
-function handleRefreshData(updatedGrade: any) {
-  // Reemitir el evento para que el componente padre actualice la data
-  emit('updateGrade', updatedGrade)
+// Emitiremos el objeto actualizado al padre
+const emit = defineEmits(['updateGrade', 'refreshData'])
+
+
+// Función para cerrar el diálogo
+const handleDialogClose = () => {
   dialogOpen.value = false
 }
 </script>
@@ -44,10 +44,12 @@ function handleRefreshData(updatedGrade: any) {
       <DialogHeader>
         <DialogTitle>Editar calificaciones</DialogTitle>
       </DialogHeader>
-      <EditGrade
+      <!-- EditButton.vue -->
+      <EditGradeForm
           :initialGrades="props.initialGrades"
-          @refreshData="handleRefreshData"
+          @closeDialog="handleDialogClose"
       />
+
     </DialogContent>
   </Dialog>
 </template>
