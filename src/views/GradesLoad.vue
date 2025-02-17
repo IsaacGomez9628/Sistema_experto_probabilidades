@@ -1,9 +1,15 @@
 <script setup lang="ts">
+
+// * Importamos los componentes
 import GradesTable from "@/components/table/grades-table/GradesTable.vue";
+
+// * Importamos la libreria necesaria para hacer peticiones HTTP
 import axios from "axios";
+
+// * Importamos las funciones necesarias para obtener la ruta actual y definir variables reactivas
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
-import AddButton from "@/components/buttons/AddButton.vue";
+
 
 const route = useRoute();
 const student_id = route.params.id as string;
@@ -31,7 +37,6 @@ onMounted(() => {
 
 <template>
   <h1 class="text-2xl font-bold text-center">Materias de {{ studentName }}</h1>
-  <AddButton :studentId="student_id" />
   <GradesTable />
 </template>
 

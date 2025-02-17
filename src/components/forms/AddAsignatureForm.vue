@@ -27,7 +27,7 @@ import {
 const reloadData = inject('reloadData') as () => Promise<void>;
 // Definición de las props
 const props = defineProps<{
-  studentId: number // Prop "studentId" para el formulario de agregar materia
+  studentId: string // Prop "studentId" para el formulario de agregar materia
 }>();
 
 // Definir los eventos que emitirá este componente
@@ -35,7 +35,7 @@ const emit = defineEmits(['closeDialog', 'refreshData']);
 
 // Esquema de validación
 const formSchema = toTypedSchema(z.object({
-  asignature_id: z.number().nonnegative('Elige una asignatura').nullable()
+  asignature_id: z.string().nonempty('Debes seleccionar una materia'),
 }));
 
 // Inicialización del formulario
@@ -90,7 +90,7 @@ const onSubmit = form.handleSubmit(async (values) => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Materias Disponibles</SelectLabel>
-                <SelectItem v-for="asignature in asignatures" :key="asignature.id" :value="asignature.id">
+                <SelectItem v-for="asignature in asignatures" :key="asignature.id" :value="asignature.id.toString()">
                   {{ asignature.name }}
                 </SelectItem>
               </SelectGroup>

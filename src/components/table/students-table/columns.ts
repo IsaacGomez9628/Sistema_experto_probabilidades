@@ -31,6 +31,14 @@ export const columns: ColumnDef<Students>[] = [
         cell: ({ row }) => h('div', {}, row.getValue('period')),
     },
     {
+        accessorKey: 'probability',
+        header: 'Probabilidad de exito',
+        cell: ({ row }) => {
+            const probability = row.getValue('probability') as number;
+            return h('div', {}, `${(probability * 100).toFixed(2)}%`);
+        },
+    },
+    {
         accessorKey: 'actions',
         header: 'Acciones',
         cell: ({ row }) => {
