@@ -1,6 +1,8 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import type { Grades } from "@/components/table/grades-table/grades.ts";
+import {Button} from "@/components/ui/button";
+import EditButton from "@/components/buttons/EditButton.vue";
 
 export const columns: ColumnDef<Grades>[] = [
     {
@@ -43,6 +45,35 @@ export const columns: ColumnDef<Grades>[] = [
             const average = Number.parseFloat(row.getValue('average'))
             const formatted = average.toFixed(2)
             return h('div', { class: 'text-right font-medium' }, formatted)
+        },
+    },
+    {
+        accessorKey: 'actions',
+        header: 'Acciones',
+        cell: ({ row }) => {
+            const id = row.original.id as string
+            return h('div', { class: 'flex space-x-2' }, [
+                h(EditButton, {
+                    initialGrades: {
+                        id: id as string,
+                        first_partial: row.getValue('first_partial') as number,
+                        second_partial: row.getValue('second_partial') as number,
+                        third_partial: row.getValue('third_partial') as number,
+                    }
+                }),
+                h(Button, {
+                    variant: 'destructive',
+                    class: 'px-4 py-2 text-sm font-medium',
+                    onClick: () => {
+                        if (confirm("¿Está seguro de eliminar este registro?")) {
+                            // Aquí llamas a la lógica para eliminar el registro, por ejemplo una API
+                            console.log(`Eliminando registro del estudiante con id ${id}`)
+                            // Ejemplo:
+                            // await deleteStudent(studentId)
+                        }
+                    },
+                }, () => 'Eliminar')
+            ])
         },
     },
 ]

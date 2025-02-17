@@ -39,7 +39,7 @@ export const columns: ColumnDef<Students>[] = [
             return h(Button, {
                 variant: 'default',
                 class: 'px-4 py-2 text-sm font-medium',
-                onClick: () => router.push({ name: 'studentLoad', params: { id: studentId } }),
+                onClick: () => router.push({ name: 'studentLoad', params: { id: studentId as string } }),
             }, () => 'Ver carga académica')
         },
     }
