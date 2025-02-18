@@ -3,6 +3,11 @@ import type { ColumnDef } from '@tanstack/vue-table'
 import type { Students } from "@/components/table/students-table/students"
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'vue-router'
+import { Icon } from "@iconify/vue"
+import checkCircleIcon from '@iconify-icons/radix-icons/check-circled'
+import exclamationTriangleIcon from '@iconify-icons/radix-icons/exclamation-triangle'
+import crossCircleIcon from '@iconify-icons/radix-icons/cross-circled'
+import DeleteStudentButton from "@/components/buttons/DeleteStudentButton.vue";
 
 export const columns: ColumnDef<Students>[] = [
     {
@@ -12,7 +17,7 @@ export const columns: ColumnDef<Students>[] = [
     },
     {
         accessorKey: 'name',
-        header: () => h('div', { class: 'text-left' }, 'Nombre'),
+        header: 'Nombre',
         cell: ({ row }) => h('div', {}, row.getValue('name')),
     },
     {
@@ -32,23 +37,34 @@ export const columns: ColumnDef<Students>[] = [
     },
     {
         accessorKey: 'probability',
-        header: 'Probabilidad de exito',
+        header: 'Probabilidad de éxito',
         cell: ({ row }) => {
             const probability = row.getValue('probability') as number;
-            return h('div', {}, `${(probability * 100).toFixed(2)}%`);
+            const icon = probability >= 0.7 ? checkCircleIcon :
+                probability >= 0.3 ? exclamationTriangleIcon :
+                    crossCircleIcon;
+            return h('div', { class: 'flex items-center' },
+                h(Icon, { icon: icon, class: 'mr-2' }),
+                `${(probability * 100).toFixed(2)}%`
+            );
         },
     },
     {
         accessorKey: 'actions',
         header: 'Acciones',
         cell: ({ row }) => {
-            const router = useRouter()
-            const studentId = row.getValue('id')
-            return h(Button, {
-                variant: 'default',
-                class: 'px-4 py-2 text-sm font-medium',
-                onClick: () => router.push({ name: 'studentLoad', params: { id: studentId as string } }),
-            }, () => 'Ver carga académica')
+            const studentId = row.original.id as string;
+            const router = useRouter();
+            return h('div', { class: 'flex space-x-2' }, [
+                h(Button, {
+                    variant: 'default',
+                    class: 'px-4 py-2 text-sm font-medium',
+                    onClick: () => router.push({ name: 'studentLoad', params: { id: studentId } }),
+                }, () => 'Ver carga académica'),
+                h(DeleteStudentButton, {
+                    id: studentId
+                })
+            ]);
         },
     }
-]
+];

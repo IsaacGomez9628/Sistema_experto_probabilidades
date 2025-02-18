@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps } from 'vue';
+import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -8,14 +8,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import AddSubjectForm from "@/components/forms/AddAsignatureForm.vue"; // Importa el formulario de agregar materia
+import AddStudentForm from "@/components/forms/AddStudentForm.vue"; // Importa el formulario para agregar estudiante
 
 const dialogOpen = ref(false);
-
-// Definición de las props
-const props = defineProps<{
-  studentId: string // Prop "studentId" para el botón de agregar materia
-}>();
 
 // Función para cerrar el diálogo
 const handleDialogClose = () => {
@@ -27,15 +22,14 @@ const handleDialogClose = () => {
   <Dialog v-model:open="dialogOpen">
     <DialogTrigger as-child>
       <Button variant="secondary" @click="dialogOpen = true">
-        Agregar Materia
+        Agregar Estudiante
       </Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Agregar Materia</DialogTitle>
+        <DialogTitle>Agregar Estudiante</DialogTitle>
       </DialogHeader>
-      <!-- AddSubjectButton.vue -->
-      <AddSubjectForm :studentId="props.studentId" @closeDialog="handleDialogClose" />
+      <AddStudentForm @closeDialog="handleDialogClose" />
     </DialogContent>
   </Dialog>
 </template>

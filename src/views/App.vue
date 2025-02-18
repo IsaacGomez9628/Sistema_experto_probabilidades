@@ -19,4 +19,6 @@ import Logo from "@/components/logo.vue";
 </template>
 
 <style scoped>
+
 </style>
+

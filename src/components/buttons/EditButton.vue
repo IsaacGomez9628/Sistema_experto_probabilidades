@@ -14,7 +14,7 @@ import EditGradeForm from "@/components/forms/EditGradeForm.vue"
 // Recibimos las calificaciones iniciales
 const props = defineProps<{
   initialGrades?: {
-    id?: number,
+    id?: string,
     first_partial?: number,
     second_partial?: number,
     third_partial?: number,

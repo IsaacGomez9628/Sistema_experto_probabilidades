@@ -2,13 +2,9 @@
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
 import { ref, defineProps, inject } from 'vue';
-import axios from "axios"; // <-- Añadir
+import axios from "axios";
 
-
-const props = defineProps<{
-  id: string
-}>();
-
+const props = defineProps<{ id: string }>();
 const dialogOpen = ref(false);
 const reloadData = inject('reloadData') as () => Promise<void>;
 
@@ -18,10 +14,10 @@ const handleDialogClose = () => {
 
 async function handleConfirmDelete() {
   try {
-    await axios.delete(`http://localhost:5000/api/student_asignature/${props.id}`); // Usar la prop "id"
+    await axios.delete(`http://localhost:5000/api/student/${props.id}`);
     await reloadData();
   } catch (error) {
-    console.error('Error eliminando el registro:', error);
+    console.error('Error eliminando el estudiante:', error);
   }
   dialogOpen.value = false;
 }
@@ -38,7 +34,7 @@ async function handleConfirmDelete() {
       <DialogHeader>
         <DialogTitle>Confirmar eliminación</DialogTitle>
       </DialogHeader>
-      <p>¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer.</p>
+      <p>¿Estás seguro de que deseas eliminar a este estudiante? Esta acción no se puede deshacer.</p>
       <DialogFooter>
         <Button variant="outline" @click="handleDialogClose">Cancelar</Button>
         <Button variant="destructive" @click="handleConfirmDelete">Eliminar</Button>
@@ -48,5 +44,5 @@ async function handleConfirmDelete() {
 </template>
 
 <style scoped>
-/* Aquí puedes agregar estilos adicionales si es necesario */
+/* Añade estilos adicionales aquí si es necesario */
 </style>
