@@ -1,59 +1,77 @@
 <script setup lang="ts">
-import { defineEmits, inject } from 'vue'
-import { useForm } from 'vee-validate'
-import { toTypedSchema } from '@vee-validate/zod'
-import * as z from 'zod'
-import axios from 'axios'
+import { defineEmits, inject } from "vue";
+import { useForm } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as z from "zod";
+import axios from "axios";
+import Swal from "sweetalert2";
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
 // Inyectamos la función de recarga, si está disponible en un componente superior
-const reloadData = inject('reloadData') as () => Promise<void>
+const reloadData = inject("reloadData") as () => Promise<void>;
 
 // Definir los eventos que emitirá este componente
-const emit = defineEmits(['closeDialog'])
+const emit = defineEmits(["closeDialog"]);
 
 // Esquema de validación para el estudiante
-const formSchema = toTypedSchema(z.object({
-  name: z.string().nonempty('El nombre es requerido'),
-  ap: z.string().nonempty('El apellido paterno es requerido'),
-  am: z.string().nonempty('El apellido materno es requerido'),
-  period: z.string().nonempty('El período es requerido'),
-}))
+const formSchema = toTypedSchema(
+  z.object({
+    name: z.string().nonempty("El nombre es requerido"),
+    ap: z.string().nonempty("El apellido paterno es requerido"),
+    am: z.string().nonempty("El apellido materno es requerido"),
+    period: z.string().nonempty("El período es requerido"),
+  })
+);
 
 // Inicialización del formulario con vee-validate
 const form = useForm({
   validationSchema: formSchema,
   initialValues: {
-    name: '',
-    ap: '',
-    am: '',
-    period: '',
-  }
-})
+    name: "",
+    ap: "",
+    am: "",
+    period: "",
+  },
+});
 
 // Función que se ejecuta al enviar el formulario
 const onSubmit = form.handleSubmit(async (values) => {
   try {
     // Llamada a la API
-    await axios.post('http://localhost:5000/api/student', values)
-    console.log('Estudiante agregado:', values)
-    emit('closeDialog')
+    await axios.post("http://localhost:5000/api/student", values);
+    console.log("Estudiante agregado:", values);
+    emit("closeDialog");
     if (reloadData) {
-      await reloadData()
+      await reloadData();
     }
+
+    // Mostrar alerta de éxito
+    Swal.fire({
+      title: "Excelente!",
+      text: "Estudiante guardado exitosamente.",
+      icon: "success",
+      draggable: true,
+    });
   } catch (error) {
-    console.error('Error al agregar el estudiante:', error.response?.data || error.message)
+    if (axios.isAxiosError(error)) {
+      console.error(
+        "Error al agregar el estudiante:",
+        error.response?.data || error.message
+      );
+    } else {
+      console.error("Error al agregar el estudiante:", error);
+    }
   }
-})
+});
 </script>
 
 <template>
@@ -62,7 +80,11 @@ const onSubmit = form.handleSubmit(async (values) => {
       <FormItem>
         <FormLabel>Nombre</FormLabel>
         <FormControl>
-          <Input v-bind="componentField" placeholder="Ingrese el nombre" class="input-class" />
+          <Input
+            v-bind="componentField"
+            placeholder="Ingrese el nombre"
+            class="input-class"
+          />
         </FormControl>
         <FormMessage />
       </FormItem>
@@ -72,7 +94,11 @@ const onSubmit = form.handleSubmit(async (values) => {
       <FormItem>
         <FormLabel>Apellido Paterno</FormLabel>
         <FormControl>
-          <Input v-bind="componentField" placeholder="Ingrese el apellido paterno" class="input-class" />
+          <Input
+            v-bind="componentField"
+            placeholder="Ingrese el apellido paterno"
+            class="input-class"
+          />
         </FormControl>
         <FormMessage />
       </FormItem>
@@ -82,7 +108,11 @@ const onSubmit = form.handleSubmit(async (values) => {
       <FormItem>
         <FormLabel>Apellido Materno</FormLabel>
         <FormControl>
-          <Input v-bind="componentField" placeholder="Ingrese el apellido materno" class="input-class" />
+          <Input
+            v-bind="componentField"
+            placeholder="Ingrese el apellido materno"
+            class="input-class"
+          />
         </FormControl>
         <FormMessage />
       </FormItem>
@@ -92,14 +122,16 @@ const onSubmit = form.handleSubmit(async (values) => {
       <FormItem>
         <FormLabel>Periodo</FormLabel>
         <FormControl>
-          <Input v-bind="componentField" placeholder="Ingrese el período (1-8)" class="input-class" />
+          <Input
+            v-bind="componentField"
+            placeholder="Ingrese el período (1-8)"
+            class="input-class"
+          />
         </FormControl>
         <FormMessage />
       </FormItem>
     </FormField>
 
-    <Button class="mt-5" type="submit">
-      Guardar
-    </Button>
+    <Button class="mt-5" type="submit"> Guardar </Button>
   </form>
 </template>
